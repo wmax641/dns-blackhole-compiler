@@ -1,5 +1,5 @@
 ## dns-blackhole-compiler
-A helper list to generate a hostfile of blackholed hostnames
+A helper list to generate a hostfile of blackholed hostnames. Outputs the blackholed hostnames into a hostfile that can be used locally
 
 ## Usage
 
