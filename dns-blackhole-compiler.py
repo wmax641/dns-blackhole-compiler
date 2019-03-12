@@ -18,8 +18,13 @@ OUTPUT_FILENAME = "hosts.blackholed"
 # Blacklist set
 BLACKLIST_SET = set()
 
-OPT_HELP_IN = "File with a list of URLS containing blacklists. If not specified, will use default Blacklist list URL:\n{}".format(BLACKLIST_LIST_URL)
+# Whitelist set
+WHITELIST_SET = set()
+
+OPT_HELP_IN = "File with a list of URLS containing blacklists. If not specified, will use default Blacklist list found at this URL:\n{}".format(BLACKLIST_LIST_URL)
+OPT_HELP_WHITELIST = "File with a list of substrings to match against hostnames to whitelist. Matched hostnames will not be added to blacklist. Beware, O(n^2) complexity!"
 OPT_HELP_OUT = "Specify an output filename. If not specified, will use the default output filename; \"{}\"".format(OUTPUT_FILENAME)
+OPT_HELP_DNSMASQ = "Output in dnsmasq.conf compatible format instead of (default) basic hosts file"
 
 # Helper function to parse blacklists
 # Skips lines starting with # and lines that are empty
@@ -52,7 +57,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", type=str, help=OPT_HELP_IN)
+    parser.add_argument("-w", "--whitelist", type=str, help=OPT_HELP_WHITELIST)
     parser.add_argument("-o", "--output", type=str, help=OPT_HELP_OUT)
+    parser.add_argument("-d", "--dnsmasq", action='store_true', help=OPT_HELP_DNSMASQ)
     args = parser.parse_args()
 
     # if defined, get blacklist list from .txt file
@@ -109,6 +116,16 @@ if __name__ == "__main__":
     i = 0
     with open(filename, 'w') as f:
         for hostname in BLACKLIST_SET:
-            f.write('{} {}\n'.format(BLACKHOLE_IPADDR, hostname))
+            # dnsmasq config file format
+            if args.dnsmasq:
+                # Skip some hostnames that dnsmasq doesn't support
+                if "--" in hostname:
+                    continue
+                elif hostname.startswith("-"):
+                    continue
+                f.write('address=/{}/{}\n'.format(hostname, BLACKHOLE_IPADDR))
+            # default, hostfile format (eg. 127.0.0.1 hostname)
+            else:
+                f.write('{} {}\n'.format(BLACKHOLE_IPADDR, hostname))
             i += 1
     print("   Wrote {} hostname blackholes".format(i))
