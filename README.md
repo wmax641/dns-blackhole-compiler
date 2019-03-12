@@ -24,7 +24,6 @@ $ head hosts.blackholed
 ```
 
 
-
 The `-i/--input` option loads the blacklist list from a local file
 
  The `-o/--output` writes the blacklist to another filename instead of the default
@@ -43,4 +42,17 @@ Opening blacklist-list file at:
    Got 1647 hostnames to add to blacklist
 Opening hosts.txt
    Wrote 2782 hostname blackholes
+```
+
+
+The `-d/--dnsmasq` will output to a format suitable for dnsmasq.conf, taking care to skip some unsupported hostname formats..
+```
+$ python3 dns-blackhole-compiler.py -d
+...
+dns-blackhole-compiler]$ head hosts.blackholed 
+address=/mkt5178.com/127.0.0.1
+address=/www.clicktrace.info/127.0.0.1
+address=/ezinetracking.com/127.0.0.1
+address=/oas.deejay.it/127.0.0.1
+...
 ```
