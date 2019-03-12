@@ -5,7 +5,7 @@ A helper list to generate a hostfile of blackholed hostnames. Outputs the blackh
 
 Default with no options will pull from a preconfigured list of blacklist found from https://firebog.net/
 
-The output will then be placed into a file called `hosts.blackholed`
+The output will then be placed into a file called `hosts.blackholed` (default filename)
 ```
 $ python3 dns-blackhole-compiler.py 
 ...
@@ -15,18 +15,13 @@ $ head hosts.blackholed
 127.0.0.1 przyspiesz.pl
 127.0.0.1 www.dailytrendsng.com
 127.0.0.1 serwislaptopowwarszawa.com.pl
-127.0.0.1 n4403ad.doubleclick.net
-127.0.0.1 darmowe-ebooki.com.pl
-127.0.0.1 feng.bu.edu.eg
-127.0.0.1 www.act-natural.pl
-127.0.0.1 888casino.com
-127.0.0.1 vimeoo.net
+...
 ```
 
 
-The `-i/--input` option loads the blacklist list from a local file
+The `-i/--input FILENAME` option loads the blacklist list from a local file
 
- The `-o/--output` writes the blacklist to another filename instead of the default
+ The `-o/--output FILENMAE` writes the blacklist to another filename instead of the default
 ```
 $ python3 dns-blackhole-compiler.py --input example_bl_list.txt --output hosts.txt
 Opening blacklist-list file at:
@@ -45,11 +40,12 @@ Opening hosts.txt
 ```
 
 
-The `-d/--dnsmasq` will output to a format suitable for dnsmasq.conf, taking care to skip some unsupported hostname formats..
+The `-d/--dnsmasq` will output to a format suitable for dnsmasq.conf, taking care to skip some unsupported hostname formats...
 ```
 $ python3 dns-blackhole-compiler.py -d
 ...
-dns-blackhole-compiler]$ head hosts.blackholed 
+...
+$ head hosts.blackholed 
 address=/mkt5178.com/127.0.0.1
 address=/www.clicktrace.info/127.0.0.1
 address=/ezinetracking.com/127.0.0.1
