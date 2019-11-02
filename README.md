@@ -22,6 +22,8 @@ $ head hosts.blackholed
 ```
 
 #### Custom lists and filenames
+Default output filename: `hosts.blackholed`
+
 The `-i/--input FILENAME` option loads the blacklist list from a local file
 
  The `-o/--output FILENMAE` writes the blacklist to another filename instead of the default
@@ -44,15 +46,17 @@ Opening hosts.txt
 
 #### dnsmasq output
 The `-d/--dnsmasq` will output to a format suitable for dnsmasq.conf, taking care to skip some unsupported hostname formats...
+
+The below file will return NXDOMAIN for these blacklisted DNS names
 ```
 $ python3 dns-blackhole-compiler.py -d
 ...
 ...
 $ head hosts.blackholed 
-address=/mkt5178.com/127.0.0.1
-address=/www.clicktrace.info/127.0.0.1
-address=/ezinetracking.com/127.0.0.1
-address=/oas.deejay.it/127.0.0.1
+address=/mkt5178.com/
+address=/www.clicktrace.info/
+address=/ezinetracking.com/
+address=/oas.deejay.it/
 ...
 ```
 
@@ -65,12 +69,14 @@ Sample dnsmasq setup.
 * Configure dnsmasq.conf with:
 ```
 interface=lo
-listen-address=::1,127.0.0.1
+listen-address=127.0.0.1
 cache-size=1000
 no-resolv
-server=8.8.8.8
-server=8.8.4.4
-conf-dir=/etc/dnsmasq.d,.bak
+server=1.1.1.1
+#server=8.8.8.8
+conf-dir=/etc/dnsmasq.d
 ```
 * `systemctl enable dnsmasq`
 * `systemctl start dnsmasq`
+
+Then modify `/etc/resolv.conf` either manually or via resolvectl to start directing DNS queries to `127.0.0.1`

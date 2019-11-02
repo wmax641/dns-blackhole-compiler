@@ -123,8 +123,7 @@ if __name__ == "__main__":
                     continue
                 elif hostname.startswith("-"):
                     continue
-                f.write('address=/{}/{}\n'.format(hostname, BLACKHOLE_IPADDR))
-            # default, hostfile format (eg. 127.0.0.1 hostname)
+                f.write('address=/{}/\n'.format(hostname))
             else:
                 f.write('{} {}\n'.format(BLACKHOLE_IPADDR, hostname))
             i += 1
